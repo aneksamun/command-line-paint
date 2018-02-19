@@ -1,0 +1,6 @@
+### SBT templatedist/*
+.idea
+target/
+project/project/
+project/target/
+
