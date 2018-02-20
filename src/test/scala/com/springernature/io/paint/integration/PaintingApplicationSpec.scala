@@ -7,11 +7,11 @@ import org.scalatest.{FeatureSpec, GivenWhenThen, Matchers}
 class PaintingApplicationSpec extends FeatureSpec with GivenWhenThen with Matchers {
 
   info("As a user")
-  info("I want to be able to draw items on canvas")
-  info("So I can create my own paint")
+  info("I want to be able to draw an items on canvas")
+  info("So that I can create my own paint")
 
   feature("Test case") {
-    scenario("User creates creates a paint") {
+    scenario("User creates a paint") {
 
       Given("a canvas")
       val canvas = extract[Canvas](Command.of("C 20 4"))
