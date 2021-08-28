@@ -79,7 +79,7 @@ sbt reload
 ```
 sbt run
 ```
-test
+- test
 ```
 sbt test
 ```
