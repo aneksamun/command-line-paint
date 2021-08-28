@@ -1,8 +1,9 @@
 package com.springernature.io.paint.domain.model
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class RectangleSpec extends FlatSpec with Matchers {
+class RectangleSpec extends AnyFlatSpec with Matchers {
 
   "Rectangle " should "successfully render on canvas" in {
     val canvas = Canvas(5, 4).right.get

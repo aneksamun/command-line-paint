@@ -1,8 +1,9 @@
 package com.springernature.io.paint.domain.model
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class FloodSpec extends FlatSpec with Matchers {
+class FloodSpec extends AnyFlatSpec with Matchers {
 
   "Flood point " should " be outside canvas" in {
     val canvas = Canvas(1, 1).right.get

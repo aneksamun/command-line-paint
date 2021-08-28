@@ -1,9 +1,10 @@
 package com.springernature.io.paint.console
 
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
-import org.scalatest.{Matchers, PropSpec}
+import org.scalatest.propspec.AnyPropSpec
 
-class CommandSpec extends PropSpec with TableDrivenPropertyChecks with Matchers {
+class CommandSpec extends AnyPropSpec with TableDrivenPropertyChecks with Matchers {
 
   val badInput =
     Table(

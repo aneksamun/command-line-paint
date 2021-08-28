@@ -2,16 +2,18 @@ package com.springernature.io.paint.integration
 
 import com.springernature.io.paint.console.Command
 import com.springernature.io.paint.domain.model.{Canvas, Line, Rectangle}
-import org.scalatest.{FeatureSpec, GivenWhenThen, Matchers}
+import org.scalatest.GivenWhenThen
+import org.scalatest.featurespec.AnyFeatureSpec
+import org.scalatest.matchers.should.Matchers
 
-class PaintingApplicationSpec extends FeatureSpec with GivenWhenThen with Matchers {
+class PaintingApplicationSpec extends AnyFeatureSpec with GivenWhenThen with Matchers {
 
   info("As a user")
   info("I want to be able to draw an items on canvas")
   info("So that I can create my own paint")
 
-  feature("Test case") {
-    scenario("User creates a paint") {
+  Feature("Test case") {
+    Scenario("User creates a paint") {
 
       Given("a canvas")
       val canvas = extract[Canvas](Command.of("C 20 4"))

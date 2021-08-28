@@ -18,11 +18,11 @@ object ModelValidation {
   }
 
   implicit class RectangleValidator(val rectangle: Rectangle) {
-    def validate: Either[String, Rectangle] = {
-      if (rectangle.x2 < rectangle.x1 || rectangle.y2 < rectangle.y1)
-        return Left(BadCoordinates.toString)
 
-      Right(rectangle)
+    def validate: Either[String, Rectangle] = {
+      Either.cond(rectangle.x2 >= rectangle.x1 && rectangle.y2 >= rectangle.y1,
+        rectangle,
+        BadCoordinates.toString)
     }
   }
 }

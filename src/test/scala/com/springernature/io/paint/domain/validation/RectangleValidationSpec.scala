@@ -1,10 +1,11 @@
 package com.springernature.io.paint.domain.validation
 
-import com.springernature.io.paint.domain.model.{Line, Rectangle}
+import com.springernature.io.paint.domain.model.Rectangle
 import com.springernature.io.paint.domain.validation.ModelValidation._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class RectangleValidationSpec extends FlatSpec with Matchers {
+class RectangleValidationSpec extends AnyFlatSpec with Matchers {
 
   "A Rectangle Validator " should " return an error when x2 is less than x1" in {
     val rectangle = Rectangle(10, 3, 1, 7)

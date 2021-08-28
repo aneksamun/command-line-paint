@@ -1,8 +1,9 @@
 package com.springernature.io.paint.domain.model
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class CanvasSpec extends FlatSpec with Matchers {
+class CanvasSpec extends AnyFlatSpec with Matchers {
 
   "Canvas " should "fail to initiate with invalid size" in {
     Canvas(0, 0).isLeft should be (true)

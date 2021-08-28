@@ -1,8 +1,9 @@
 package com.springernature.io.paint.domain.model
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class PointSpec extends FlatSpec with Matchers {
+class PointSpec extends AnyFlatSpec with Matchers {
 
   "Two Same Points " should " be equal" in {
     assert(Point(1, 1) == Point(1, 1))

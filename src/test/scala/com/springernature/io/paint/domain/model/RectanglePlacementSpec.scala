@@ -1,9 +1,10 @@
 package com.springernature.io.paint.domain.model
 
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
-import org.scalatest.{Matchers, PropSpec}
+import org.scalatest.propspec.AnyPropSpec
 
-class RectanglePlacementSpec extends PropSpec with TableDrivenPropertyChecks with Matchers {
+class RectanglePlacementSpec extends AnyPropSpec with TableDrivenPropertyChecks with Matchers {
 
   val rectangles =
     Table(

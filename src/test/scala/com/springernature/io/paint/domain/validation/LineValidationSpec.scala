@@ -2,9 +2,10 @@ package com.springernature.io.paint.domain.validation
 
 import com.springernature.io.paint.domain.model.Line
 import com.springernature.io.paint.domain.validation.ModelValidation._
-import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class LineValidationSpec extends FlatSpec with Matchers {
+class LineValidationSpec extends AnyFlatSpec with Matchers {
 
   "A Line Validator " should " return an error when line is not vertical or horizontal" in {
     val invalidLine = Line((2, 1), (1, 2))
