@@ -71,9 +71,15 @@ sbt compile
 ```
 sbt assembly
 ```
-- refresh
+- reload
 ```
 sbt reload
 ```
-
-
+- run
+```
+sbt run
+```
+test
+```
+sbt test
+```
