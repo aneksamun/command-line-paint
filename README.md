@@ -1,4 +1,7 @@
 # Command Line Paint
+
+![Build status](https://github.com/aneksamun/command-line-paint/actions/workflows/scala.yml/badge.svg)
+
 A basic command line tool for drawing in console. Currently supports rectangles, lines and bucket fills.
 
 ## Commands 
