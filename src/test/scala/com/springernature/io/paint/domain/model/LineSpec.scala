@@ -6,10 +6,10 @@ import org.scalatest.matchers.should.Matchers
 class LineSpec extends AnyFlatSpec with Matchers {
 
   "Horizontal Line " should "successfully render on canvas" in {
-    val canvas = Canvas(5, 4).right.get
+    val canvas = new Canvas(width = 5, height = 4)
     val line = Line((1, 1), (5, 1))
 
-    line.render(canvas)
+    line.render(canvas).isRight should be (true)
 
     canvas.toString should be (
         "-------\n" +
@@ -22,10 +22,10 @@ class LineSpec extends AnyFlatSpec with Matchers {
   }
 
   "Vertical Line " should "successfully render on canvas" in {
-    val canvas = Canvas(5, 4).right.get
+    val canvas = new Canvas(width = 5, height = 4)
     val line = Line((2, 1), (2, 3))
 
-    line.render(canvas)
+    line.render(canvas).isRight should be (true)
 
     canvas.toString should be (
         "-------\n" +

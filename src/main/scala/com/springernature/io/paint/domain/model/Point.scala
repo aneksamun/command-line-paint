@@ -1,6 +1,6 @@
 package com.springernature.io.paint.domain.model
 
-case class Point(x: Int, y: Int) {
+final case class Point(x: Int, y: Int) {
 
   def ==(that: Point): Boolean = this.equals(that)
   def =!(that: Point): Boolean = !this.equals(that)
@@ -15,10 +15,9 @@ case class Point(x: Int, y: Int) {
   def *(tuple: (Int, Int)) = Point(x * tuple._1, this.y * tuple._2)
   def /(tuple: (Int, Int)) = Point(x / tuple._1, this.y / tuple._2)
 
-  def isInside(canvas: Canvas): Boolean = {
+  def isInside(canvas: Canvas): Boolean =
     (x > 0 && x < canvas.width - 1) &&
       (y > 0 && y < canvas.height - 1)
-  }
 }
 
 object Point {

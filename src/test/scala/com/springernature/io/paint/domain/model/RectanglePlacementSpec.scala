@@ -6,26 +6,29 @@ import org.scalatest.propspec.AnyPropSpec
 
 class RectanglePlacementSpec extends AnyPropSpec with TableDrivenPropertyChecks with Matchers {
 
-  val rectangles =
-    Table(
-      "rectangles",
-      Rectangle(1, 1, 2, 4),
-      Rectangle(1, 1, 4, 2),
-      Rectangle(3, 3, 5, 5)
-    )
+  val rectangles = Table(
+    "rectangles",
+    Rectangle(x1 = 1, y1 = 1, x2 = 2, y2 = 4),
+    Rectangle(x1 = 1, y1 = 1, x2 = 4, y2 = 2),
+    Rectangle(x1 = 3, y1 = 3, x2 = 5, y2 = 5)
+  )
 
   property("is outside of canvas") {
-    val canvas: Canvas = Canvas(3, 3).right.get
-    forAll(rectangles) { _.isInside(canvas) should be (false) }
+    val canvas = new Canvas(width = 3, height = 3)
+    forAll(rectangles) {
+      _.isInside(canvas) should be(false)
+    }
   }
 
   property("is inside canvas") {
-    val canvas: Canvas = Canvas(5, 5).right.get
-    forAll(rectangles) { _.isInside(canvas) should be (true) }
+    val canvas = new Canvas(width = 5, height = 5)
+    forAll(rectangles) {
+      _.isInside(canvas) should be(true)
+    }
   }
 
   property("rectangle could not be placed at (0,0) position") {
-    val canvas: Canvas = Canvas(1, 1).right.get
-    Rectangle(0, 0, 4, 3).isInside(canvas) should be (false)
+    val canvas = new Canvas(width = 1, height = 1)
+    Rectangle(x1 = 0, y1 = 0, x2 = 4, y2 = 3).isInside(canvas) should be(false)
   }
 }

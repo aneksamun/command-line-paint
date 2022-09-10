@@ -1,49 +1,61 @@
 package com.springernature.io.paint
 
 import com.springernature.io.paint.console.Command
-import com.springernature.io.paint.console.Command.{CreateCanvas, Quit}
-import com.springernature.io.paint.domain.common.Error.CanvasNotPresent
+import com.springernature.io.paint.domain.common.Error._
 import com.springernature.io.paint.domain.model._
+import com.springernature.io.paint.syntax._
 
 import scala.io.StdIn.readLine
 import scala.util.control.Breaks.{break, breakable}
 
 object PaintingApplication extends App {
-  println("Welcome to command line paint!")
+
   private var canvas: Option[Canvas] = None
+
+  private lazy val usage = (
+    Command.CreateCanvas.description ::
+      Command.DrawLine.description ::
+      Command.DrawRectangle.description ::
+      Command.FillBucket.description ::
+      Command.Quit.description ::
+      Nil
+    ).mkString(
+    start = "\nUsage: command [args1, arg2, ... argN]\n",
+    sep = "\n",
+    end = ""
+  )
+
+  println("Welcome to command line paint!")
 
   breakable {
     while (true) {
-      val line = readLine("\nEnter command: ")
-      Command.of(line) match {
-        case Some((Quit, _)) => break
-        case Some((CreateCanvas, result)) => proceed(result, assignCanvas())
-        case Some((_, result)) => proceed(result, addShape())
-        case None => printUsage()
+      val input = readLine("\nEnter command: ")
+      Command.from(input).collect {
+        case createCanvas: Command.CreateCanvas =>
+          createCanvas.execute.applying(toGlobalContext)
+        case drawLine: Command.DrawLine =>
+          drawLine.execute.applying(toCanvas)
+        case drawRectangle: Command.DrawRectangle =>
+          drawRectangle.execute.applying(toCanvas)
+        case fillBucket: Command.FillBucket =>
+          fillBucket.execute.applying(toCanvas)
+        case _: Command.Quit =>
+          break()
+      }.getOrElse(println(usage))
+    }
+  }
+
+  private def toGlobalContext(newCanvas: Canvas): Unit = {
+    println(newCanvas)
+    canvas = Some(newCanvas)
+    ()
+  }
+
+  private def toCanvas(shape: Shape): Unit =
+    canvas
+      .toRight(CanvasNotPresent)
+      .map(_.add(shape))
+      .foreach { paintOrError =>
+        println(paintOrError.fold(_.message, _.toString))
       }
-    }
-  }
-
-  def printUsage() {
-    println("\nUsage: command [args1, arg2, ... argN]\n")
-    Command.values.foreach { println }
-  }
-
-  private def assignCanvas() = {
-    (other: Any) => {
-      canvas = Some(other.asInstanceOf[Canvas])
-      println(canvas.get)
-    }
-  }
-
-  private def addShape() = {
-    (shape: Any) => {
-      println(canvas.map(_.add(shape.asInstanceOf[Shape]).fold(error => error, _.toString))
-        .getOrElse(CanvasNotPresent.toString))
-    }
-  }
-
-  private def proceed(value: Either[String, _], action: Any => Unit) {
-    value.fold(error => println(error), unit => action(unit))
-  }
 }

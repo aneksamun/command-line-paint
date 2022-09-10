@@ -1,29 +1,32 @@
 package com.springernature.io.paint.domain.model
 
-import com.springernature.io.paint.domain.common.Error.{InvalidCanvasSize, BadPosition}
+import com.springernature.io.paint.domain.common.Error
+import com.springernature.io.paint.domain.common.Error._
 
-class Canvas private(val width: Int,
-                     val height: Int,
-                     val background: Char) {
+import scala.collection.mutable
 
-  private val grid: Array[Array[Char]] = Array.fill(height, width) { background }
+class Canvas private[model](val width: Int,
+                            val height: Int,
+                            val background: Char = 32.toChar) {
+
+  private val grid: Array[Array[Char]] = Array.fill(height, width)(background)
 
   def apply(x: Int, y: Int): Char = grid(y)(x)
 
-  def update(x: Int, y: Int, char: Char) {
+  def update(x: Int, y: Int, char: Char): Unit =
     grid(y)(x) = char
-  }
 
-  def add(shape: Shape): Either[String, Canvas] = {
-    if (shape.isInside(this)) {
-      shape.render(this)
-      return Right(this)
-    }
-    Left(BadPosition.toString)
-  }
+  def charAt(point: Point): Char = apply(point.x, point.y)
+
+  def add(shape: Shape): Either[Error, Unit] =
+    Either.cond(
+      shape.isInside(this),
+      shape.render(this),
+      BadPosition
+    )
 
   override def toString: String = {
-    val builder = new StringBuilder()
+    val builder = new mutable.StringBuilder()
     for (i <- grid.indices) {
       builder.appendAll(grid(i))
       if (i + 1 < grid.length)
@@ -34,15 +37,16 @@ class Canvas private(val width: Int,
 }
 
 object Canvas {
-  val margin = 1
-  val horizontalEdgeCharacter = '-'
-  val verticalEdgeCharacter = '|'
 
-  def apply(width: Int, height: Int): Either[String, Canvas] = {
+  private[domain] val margin = 1
+  private val horizontalEdgeCharacter = '-'
+  private val verticalEdgeCharacter = '|'
+
+  def apply(width: Int, height: Int): Either[Error, Canvas] = {
     if (width < margin || height < margin)
-      return Left(InvalidCanvasSize.toString)
+      return Left(InvalidCanvasSize)
 
-    val canvas = new Canvas(getTotal(width), getTotal(height), 32.toChar)
+    val canvas = new Canvas(getTotal(width), getTotal(height))
 
     val topBorder = calculateTopBorder(width)
     val leftBorder = calculateLeftBorder(height)

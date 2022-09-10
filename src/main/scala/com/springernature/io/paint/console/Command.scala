@@ -1,66 +1,73 @@
 package com.springernature.io.paint.console
 
+import com.springernature.io.paint.domain.common.Error
 import com.springernature.io.paint.domain.model._
-import com.springernature.io.paint.domain.validation.ModelValidation._
-import enumeratum.{Enum, EnumEntry}
 
-import scala.collection.immutable.IndexedSeq
-import scala.util.matching.Regex
-
-
-sealed trait Command extends EnumEntry {
-  private[console] val pattern: Regex
+sealed trait Command[A] {
+  def execute: Either[Error, A]
 }
 
-object Command extends Enum[Command] {
-  val values: IndexedSeq[Command] = findValues
+object Command {
 
-  case object CreateCanvas extends Command {
-    override private[console] val pattern: Regex = "(?i)C (\\d+) (\\d+)".r
-    override def toString: String = "C\tCreates a new canvas of width w and height h"
-    def execute(width: Int, height: Int): Either[String, Canvas] =
+  final case class CreateCanvas(width: Int, height: Int) extends Command[Canvas] {
+    def execute: Either[Error, Canvas] =
       Canvas(width, height)
   }
 
-  case object DrawLine extends Command {
-    override private[console] val pattern: Regex = "(?i)L (\\d+) (\\d+) (\\d+) (\\d+)".r
-    override def toString: String = "L\tCreates a new line from (x1,y1) to (x2,y2)"
-    def execute(x1: Int, y1: Int, x2: Int, y2: Int): Either[String, Line] =
-      Line(Point(x1, y1), Point(x2, y2)).validate
+  object CreateCanvas {
+    private[console] val pattern  = "(?i)C (\\d+) (\\d+)".r
+    def description = "C\tCreates a new canvas of width w and height h"
   }
 
-  case object DrawRectangle extends Command {
-    override private[console] val pattern: Regex = "(?i)R (\\d+) (\\d+) (\\d+) (\\d+)".r
-    override def toString: String = "R\tCreate a new rectangle, whose upper left corner is (x1,y1) and lower right corner is (x2,y2)"
-    def execute(x1: Int, y1: Int, x2: Int, y2: Int): Either[String, Rectangle] =
-      Rectangle(x1, y1, x2, y2).validate
+  final case class DrawLine(x1: Int, y1: Int, x2: Int, y2: Int) extends Command[Line] {
+    def execute: Either[Error, Line] =
+      Line.make(Point(x1, y1), Point(x2, y2))
   }
 
-  case object FillBucket extends Command {
-    override private[console] val pattern: Regex = "(?i)B (\\d+) (\\d+) (.+)".r
-    override def toString: String = "B\tFills the entire area connected to (x,y) with specified character"
-    def execute(x: Int, y: Int, ch: Char): Either[String, Flood] =
+  object DrawLine {
+    private[console] val pattern = "(?i)L (\\d+) (\\d+) (\\d+) (\\d+)".r
+    def description = "L\tCreates a new line from (x1, y1) to (x2, y2)"
+  }
+
+  final case class DrawRectangle(x1: Int, y1: Int, x2: Int, y2: Int) extends Command[Rectangle] {
+    def execute: Either[Error, Rectangle] =
+      Rectangle.make(x1, y1, x2, y2)
+  }
+
+  object DrawRectangle {
+    private[console] val pattern = "(?i)R (\\d+) (\\d+) (\\d+) (\\d+)".r
+    def description =
+      "R\tCreate a new rectangle, whose upper left corner is (x1, y1) and lower right corner is (x2, y2)"
+  }
+
+  final case class FillBucket(x: Int, y: Int, ch: Char) extends Command[Flood] {
+    def execute: Either[Error, Flood] =
       Right(Flood(Point(x, y), ch))
   }
 
-  case object Quit extends Command {
-    override private[console] val pattern: Regex = "(?i)Q".r
-    override def toString: String = "Q\tQuits the program"
+  object FillBucket {
+    private[console] val pattern = "(?i)B (\\d+) (\\d+) (.+)".r
+    def description = "B\tFills the entire area connected to (x, y) with specified character"
   }
 
-  def of(line: String): Option[(Command, Either[String, _])] = {
-    line match {
-      case CreateCanvas.pattern(width, height) =>
-        Some((CreateCanvas, CreateCanvas.execute(width.toInt, height.toInt)))
-      case DrawLine.pattern(x1, y1, x2, y2) =>
-        Some(DrawLine, DrawLine.execute(x1.toInt, y1.toInt, x2.toInt, y2.toInt))
-      case DrawRectangle.pattern(x1, y1, x2, y2) =>
-        Some(DrawRectangle, DrawRectangle.execute(x1.toInt, y1.toInt, x2.toInt, y2.toInt))
-      case FillBucket.pattern(x, y, ch) =>
-        Some(FillBucket, FillBucket.execute(x.toInt, y.toInt, ch(0)))
-      case Quit.pattern() =>
-        Some(Quit, Right(None))
-      case _ => None
-    }
+  final case class Quit() extends Command[Unit] {
+    def execute: Either[Error, Unit] = Right(())
+  }
+
+  object Quit {
+    private[console] val pattern = "(?i)Q".r
+    def description = "Q\tQuits the program"
+  }
+
+  def from(input: String): Option[Command[_]] = Option(input).collect {
+    case Command.CreateCanvas.pattern(width, height) =>
+      CreateCanvas(width.toInt, height.toInt)
+    case Command.DrawLine.pattern(x1, y1, x2, y2) =>
+      DrawLine(x1.toInt, y1.toInt, x2.toInt, y2.toInt)
+    case Command.DrawRectangle.pattern(x1, y1, x2, y2) =>
+      DrawRectangle(x1.toInt, y1.toInt, x2.toInt, y2.toInt)
+    case Command.FillBucket.pattern(x, y, ch) =>
+      FillBucket(x.toInt, y.toInt, ch(0))
+    case Command.Quit.pattern => Quit()
   }
 }

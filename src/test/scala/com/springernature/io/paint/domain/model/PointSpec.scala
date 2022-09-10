@@ -6,7 +6,7 @@ import org.scalatest.matchers.should.Matchers
 class PointSpec extends AnyFlatSpec with Matchers {
 
   "Two Same Points " should " be equal" in {
-    assert(Point(1, 1) == Point(1, 1))
+    assert(Point(x = 1, y = 1) == Point(x = 1, y = 1))
   }
 
   "Two Different Points " should " not be equal" in {
@@ -34,7 +34,7 @@ class PointSpec extends AnyFlatSpec with Matchers {
   }
 
   "Point " should " be outside canvas" in {
-    val canvas = Canvas(1, 1).right.get
+    val canvas = new Canvas(width = 1, height = 1)
     Point(0, 0).isInside(canvas) should be (false)
     Point(2, 1).isInside(canvas) should be (false)
     Point(1, 2).isInside(canvas) should be (false)
@@ -42,7 +42,7 @@ class PointSpec extends AnyFlatSpec with Matchers {
   }
 
   it should " should be inside canvas" in {
-    val canvas = Canvas(1, 1).right.get
+    val canvas = new Canvas(width = 1, height = 1)
     Point(1, 1).isInside(canvas) should be (true)
   }
 }

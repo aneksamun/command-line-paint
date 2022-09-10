@@ -6,10 +6,10 @@ import org.scalatest.matchers.should.Matchers
 class RectangleSpec extends AnyFlatSpec with Matchers {
 
   "Rectangle " should "successfully render on canvas" in {
-    val canvas = Canvas(5, 4).right.get
-    val rectangle = Rectangle(1, 1, 3, 3)
+    val canvas = new Canvas(width = 5, height = 4)
+    val rectangle = Rectangle(x1 = 1, y1 = 1, x2 = 3, y2 = 3)
 
-    rectangle.render(canvas)
+    rectangle.render(canvas).isRight should be (true)
 
     canvas.toString should be (
       "-------\n" +

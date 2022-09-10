@@ -6,7 +6,7 @@ import org.scalatest.matchers.should.Matchers
 class FloodSpec extends AnyFlatSpec with Matchers {
 
   "Flood point " should " be outside canvas" in {
-    val canvas = Canvas(1, 1).right.get
+    val canvas = new Canvas(width = 1, height = 1)
     Flood((0, 0), '?').isInside(canvas) should be (false)
     Flood((2, 1), '?').isInside(canvas) should be (false)
     Flood((1, 2), '?').isInside(canvas) should be (false)
@@ -14,15 +14,20 @@ class FloodSpec extends AnyFlatSpec with Matchers {
   }
 
   "Flood point " should " be inside canvas" in {
-    val canvas = Canvas(1, 1).right.get
+    val canvas = new Canvas(width = 1, height = 1)
     Flood((1, 1), '?').isInside(canvas) should be (true)
   }
 
   "Flood " should " successfully render on canvas" in {
-    val canvas = Canvas(5, 4).right.get
+    val canvas = new Canvas(width = 5, height = 4)
 
-    Rectangle(1, 1, 3, 3).render(canvas)
-    Flood((1, 4), '$').render(canvas)
+    Rectangle(x1 = 1, y1 = 1, x2 = 3, y2 = 3)
+      .render(canvas)
+      .isRight should be (true)
+
+    Flood((1, 4), '$')
+      .render(canvas)
+      .isRight should be (true)
 
     canvas.toString should be (
         "-------\n" +
@@ -35,10 +40,15 @@ class FloodSpec extends AnyFlatSpec with Matchers {
   }
 
   "Flood " should " re-render on canvas" in {
-    val canvas = Canvas(5, 4).right.get
+    val canvas = new Canvas(width = 5, height = 4)
 
-    Rectangle(1, 1, 3, 3).render(canvas)
-    Flood((1, 3), '@').render(canvas)
+    Rectangle(x1 = 1, y1 = 1, x2 = 3, y2 = 3)
+      .render(canvas)
+      .isRight should be (true)
+
+    Flood((1, 3), '@')
+      .render(canvas)
+      .isRight should be (true)
 
     canvas.toString should be (
       "-------\n" +
