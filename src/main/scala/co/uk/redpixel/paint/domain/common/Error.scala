@@ -3,8 +3,6 @@ package co.uk.redpixel.paint.domain.common
 import co.uk.redpixel.paint.domain.model.Canvas
 import enumeratum._
 
-import scala.collection.immutable.IndexedSeq
-
 sealed abstract class Error(val message: String) extends EnumEntry
 
 object Error extends Enum[Error] {
