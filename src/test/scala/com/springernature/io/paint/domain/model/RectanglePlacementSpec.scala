@@ -1,10 +1,14 @@
 package com.springernature.io.paint.domain.model
 
+import org.scalatest.EitherValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.propspec.AnyPropSpec
 
-class RectanglePlacementSpec extends AnyPropSpec with TableDrivenPropertyChecks with Matchers {
+class RectanglePlacementSpec extends AnyPropSpec
+  with TableDrivenPropertyChecks
+  with EitherValues
+  with Matchers {
 
   val rectangles = Table(
     "rectangles",
@@ -14,21 +18,21 @@ class RectanglePlacementSpec extends AnyPropSpec with TableDrivenPropertyChecks 
   )
 
   property("is outside of canvas") {
-    val canvas = new Canvas(width = 3, height = 3)
+    val canvas = Canvas.make(width = 3, height = 3).value
     forAll(rectangles) {
       _.isInside(canvas) should be(false)
     }
   }
 
   property("is inside canvas") {
-    val canvas = new Canvas(width = 5, height = 5)
+    val canvas = Canvas.make(width = 5, height = 5).value
     forAll(rectangles) {
       _.isInside(canvas) should be(true)
     }
   }
 
   property("rectangle could not be placed at (0,0) position") {
-    val canvas = new Canvas(width = 1, height = 1)
+    val canvas = Canvas.make(width = 1, height = 1).value
     Rectangle(x1 = 0, y1 = 0, x2 = 4, y2 = 3).isInside(canvas) should be(false)
   }
 }

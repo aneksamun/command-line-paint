@@ -1,7 +1,7 @@
 package com.springernature.io.paint.integration
 
 import com.springernature.io.paint.console.Command
-import com.springernature.io.paint.domain.model.{Canvas, Line, Rectangle}
+import com.springernature.io.paint.domain.model.{Canvas, Flood, Line, Rectangle}
 import org.scalatest.{GivenWhenThen, OptionValues}
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.matchers.should.Matchers
@@ -32,7 +32,7 @@ class PaintingApplicationSpec extends AnyFeatureSpec
       canvas add rectangle
 
       And("bucket fill")
-      val bucket = getOrFail[Rectangle]("B 10 3 o")
+      val bucket = getOrFail[Flood]("B 10 3 o")
       canvas add bucket
 
       When("canvas is rendered")
@@ -41,17 +41,17 @@ class PaintingApplicationSpec extends AnyFeatureSpec
       Then("it has all items in place")
       paint should be(
         "----------------------\n" +
-          "|oooooooooooooooXXXXX|\n" +
-          "|XXXXXXoooooooooX   X|\n" +
-          "|     XoooooooooXXXXX|\n" +
-          "|     Xoooooooooooooo|\n" +
-          "----------------------"
+        "|oooooooooooooooXXXXX|\n" +
+        "|XXXXXXoooooooooX   X|\n" +
+        "|     XoooooooooXXXXX|\n" +
+        "|     Xoooooooooooooo|\n" +
+        "----------------------"
       )
     }
   }
 
   private def getOrFail[A](input: String): A = (for {
-    cmd <- Command.from(input)
+    cmd     <- Command.from(input)
     outcome <- cmd.execute.map(_.asInstanceOf[A]).toOption
   } yield outcome).value
 }

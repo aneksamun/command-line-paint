@@ -11,7 +11,7 @@ object Command {
 
   final case class CreateCanvas(width: Int, height: Int) extends Command[Canvas] {
     def execute: Either[Error, Canvas] =
-      Canvas(width, height)
+      Canvas.make(width, height)
   }
 
   object CreateCanvas {
@@ -68,6 +68,6 @@ object Command {
       DrawRectangle(x1.toInt, y1.toInt, x2.toInt, y2.toInt)
     case Command.FillBucket.pattern(x, y, ch) =>
       FillBucket(x.toInt, y.toInt, ch(0))
-    case Command.Quit.pattern => Quit()
+    case Command.Quit.pattern() => Quit()
   }
 }

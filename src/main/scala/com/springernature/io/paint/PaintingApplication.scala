@@ -32,13 +32,21 @@ object PaintingApplication extends App {
       val input = readLine("\nEnter command: ")
       Command.from(input).collect {
         case createCanvas: Command.CreateCanvas =>
-          createCanvas.execute.applying(toGlobalContext)
+          createCanvas
+            .execute
+            .applying(toGlobalContext)
         case drawLine: Command.DrawLine =>
-          drawLine.execute.applying(toCanvas)
+          drawLine
+            .execute
+            .applying(toCanvas)
         case drawRectangle: Command.DrawRectangle =>
-          drawRectangle.execute.applying(toCanvas)
+          drawRectangle
+            .execute
+            .applying(toCanvas)
         case fillBucket: Command.FillBucket =>
-          fillBucket.execute.applying(toCanvas)
+          fillBucket
+            .execute
+            .applying(toCanvas)
         case _: Command.Quit =>
           break()
       }.getOrElse(println(usage))

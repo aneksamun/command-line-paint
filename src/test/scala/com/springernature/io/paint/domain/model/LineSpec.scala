@@ -1,12 +1,13 @@
 package com.springernature.io.paint.domain.model
 
+import org.scalatest.EitherValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class LineSpec extends AnyFlatSpec with Matchers {
+class LineSpec extends AnyFlatSpec with EitherValues with Matchers {
 
   "Horizontal Line " should "successfully render on canvas" in {
-    val canvas = new Canvas(width = 5, height = 4)
+    val canvas = Canvas.make(width = 5, height = 4).value
     val line = Line((1, 1), (5, 1))
 
     line.render(canvas).isRight should be (true)
@@ -22,7 +23,7 @@ class LineSpec extends AnyFlatSpec with Matchers {
   }
 
   "Vertical Line " should "successfully render on canvas" in {
-    val canvas = new Canvas(width = 5, height = 4)
+    val canvas = Canvas.make(width = 5, height = 4).value
     val line = Line((2, 1), (2, 3))
 
     line.render(canvas).isRight should be (true)

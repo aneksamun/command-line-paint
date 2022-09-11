@@ -1,9 +1,10 @@
 package com.springernature.io.paint.domain.model
 
+import org.scalatest.EitherValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class PointSpec extends AnyFlatSpec with Matchers {
+class PointSpec extends AnyFlatSpec with EitherValues with Matchers {
 
   "Two Same Points " should " be equal" in {
     assert(Point(x = 1, y = 1) == Point(x = 1, y = 1))
@@ -34,15 +35,17 @@ class PointSpec extends AnyFlatSpec with Matchers {
   }
 
   "Point " should " be outside canvas" in {
-    val canvas = new Canvas(width = 1, height = 1)
-    Point(0, 0).isInside(canvas) should be (false)
-    Point(2, 1).isInside(canvas) should be (false)
-    Point(1, 2).isInside(canvas) should be (false)
-    Point(2, 2).isInside(canvas) should be (false)
+    val canvas = Canvas.make(width = 1, height = 1).value
+    Point(0, 0).isInside(canvas) should be(false)
+    Point(2, 1).isInside(canvas) should be(false)
+    Point(1, 2).isInside(canvas) should be(false)
+    Point(2, 2).isInside(canvas) should be(false)
   }
 
   it should " should be inside canvas" in {
-    val canvas = new Canvas(width = 1, height = 1)
-    Point(1, 1).isInside(canvas) should be (true)
+    val canvas = Canvas
+      .make(width = 1, height = 1)
+      .value
+    Point(1, 1).isInside(canvas) should be(true)
   }
 }
