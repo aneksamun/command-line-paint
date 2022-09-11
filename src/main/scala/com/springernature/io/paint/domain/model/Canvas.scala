@@ -19,12 +19,12 @@ class Canvas private(val width: Int,
 
   def charAt(point: Point): Char = apply(point.x, point.y)
 
-  def add(shape: Shape): Either[Error, Unit] =
-    Either.cond(
-      shape.isInside(this),
-      shape.render(this),
-      BadPosition
-    )
+  def add(shape: Shape): Either[Error, Unit] = {
+    if (!shape.isInside(this))
+      return Left(BadPosition)
+
+    shape.render(this)
+  }
 
   override def toString: String = {
     val builder = new mutable.StringBuilder()

@@ -60,10 +60,14 @@ object PaintingApplication extends App {
   }
 
   private def toCanvas(shape: Shape): Unit =
-    canvas
-      .toRight(CanvasNotPresent)
-      .map(_.add(shape))
-      .foreach { paintOrError =>
-        println(paintOrError.fold(_.message, _.toString))
-      }
+    println(
+      canvas
+        .toRight(CanvasNotPresent)
+        .flatMap { paint =>
+          paint
+            .add(shape)
+            .map(_ => paint)
+        }
+        .fold(_.message, _.toString)
+    )
 }
