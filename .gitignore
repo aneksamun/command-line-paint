@@ -1,6 +1,7 @@
 ### SBT templatedist/*
 .idea
 .bsp
+.vscode
 target/
 project/project/
 project/target/

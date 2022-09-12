@@ -13,21 +13,3 @@ libraryDependencies ++= Seq(
   "com.beachape" %% "enumeratum" % enumeratumVersion,
   "org.scalatest" %% "scalatest" % scalaTestVersion % Test
 )
-
-scalacOptions ++= Seq(
-  "-deprecation",
-  "-encoding", "UTF-8",
-  "-explaintypes",
-  "-language:postfixOps",
-  "-language:implicitConversions",
-  "-language:existentials",
-  "-feature",
-  "-Xfatal-warnings",
-  "-Ywarn-dead-code",
-  "-Ywarn-extra-implicit",
-  "-Ywarn-unused:implicits",
-  "-Ywarn-unused:imports",
-  "-Ywarn-unused:locals",
-  "-Ywarn-unused:params",
-  "-Ywarn-unused:privates"
-)
